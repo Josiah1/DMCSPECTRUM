@@ -32,7 +32,7 @@ int main(int argc, char** argv){
 		if(mode==0) file=TString::Format(roodir+"/GdLS/out_Gd_%d.root",i);
 		if(mode==1) file=TString::Format(roodir+"/LS/out_LS_%d.root",i);
 
-		int ifexit=!(gSystem->AccessPathName(file));
+		Bool_t ifexit=!(gSystem->AccessPathName(file));
 		if(ifexit) {
 			tree->Add(file);
 			TString mcfiledir="/dybfs2/users/lijj/FullChain/Project_m14a_mc/Production/M14A/python/M14A/Output/";
