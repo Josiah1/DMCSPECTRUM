@@ -1,2 +1,2 @@
 #!/bin/tcsh
-./pro 1
+./pro 1>>LS.info

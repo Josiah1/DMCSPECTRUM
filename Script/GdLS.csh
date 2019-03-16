@@ -1,2 +1,2 @@
 #!/bin/tcsh
-./pro 0
+./pro 0>>GdLS.info

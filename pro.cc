@@ -68,11 +68,12 @@ int main(int argc, char** argv){
 		if(tr->Fold==2) hEdfit->Fill(tr->E[1]);
 	}
 
-	TF1* fgaus=new TF1("fgaus","gaus(0)",1,3);
+	TF1* fgaus=new TF1("fgaus","gaus(0)+[3]",1,3);
 	fgaus->SetParNames("A","#mu","#sigma");
 	//set initial values for fit
 	fgaus->SetParameter(1,2.2);
 	fgaus->SetParameter(2,0.2);
+	fgaus->SetParameter(3,250);
 	fgaus->SetParameter(0,hEdfit->GetMaximum());
 
 	//derive value of sigma
@@ -104,17 +105,30 @@ int main(int argc, char** argv){
 
 		hEp->Fill(Ep);
 		hEd->Fill(Ed);
+		//Cut list
+		Bool_t cut_Ep=(Ep>1.5);
+		Bool_t cut_Tc=(Tc>1.e-6 && Tc<400.e-6);
+		Bool_t cut_Ed=(Ed>(mu-3*sigma)&&(Ed<(mu+3*sigma)));
+		Bool_t cut_Dpd=(Dpd<500);
 
 		//derive event number after cuts
-		if(Ep>1.5 && Tc>1.e-6 && Tc<400.e-6) eventNumber_Tc++;
-		if(Ep>1.5 && Tc>1.e-6 && Tc<400.e-6 && Ed>(mu-3*sigma) && Ed<(mu+3*sigma)) eventNumber_Ed++;
-		if(Ep>1.5 && Tc>1.e-6 && Tc<400.e-6 && Ed>(mu-3*sigma) && Ed<(mu+3*sigma) && Dpd<50) eventNumber_D++;
+		if(cut_Ep && cut_Tc) eventNumber_Tc++;
+		if(cut_Ep && cut_Tc && cut_Ed) eventNumber_Ed++;
+		if(cut_Ep && cut_Tc && cut_Ed && cut_Dpd) eventNumber_D++;
 		
 	}
+	cout<<"Event Number List"<<endl;
+	cout<<"Origin Event: "<<eventOrigin<<endl;
+	cout<<"Ep cut Event: "<<eventNumber_Ep<<endl;
+	cout<<"Tc cut Event: "<<eventNumber_Tc<<endl;
+	cout<<"Ed cut Event: "<<eventNumber_Ed<<endl;
+	cout<<"Dpd cut Event: "<<eventNumber_D<<endl;
 
 	hEp->Write();
 	hEd->Write();
-	result->Write();
+	hEdfit->Write();
+	fgaus->Write();
+	result->Close();
 	
 	return 0;
 }
