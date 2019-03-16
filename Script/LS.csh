@@ -1,2 +1,2 @@
 #!/bin/tcsh
-./pro 2
+./pro 1

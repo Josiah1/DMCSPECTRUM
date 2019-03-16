@@ -112,6 +112,8 @@ int main(int argc, char** argv){
 		
 	}
 
+	hEp->Write();
+	hEd->Write();
 	result->Write();
 	
 	return 0;
